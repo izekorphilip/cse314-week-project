@@ -1,11 +1,11 @@
 const mongodb = require('../db/connect');
 const ObjectId = require('mongodb').ObjectId;
 
-const getAll = (req, res) => {
+const getAllStudies = (req, res) => {
   mongodb
     .getDb()
     .db()
-    .collection('Project_3')
+    .collection('Studies')
     .find() 
     .toArray((err, lists) => {
       if (err) {
@@ -16,7 +16,7 @@ const getAll = (req, res) => {
     });
 };
 
-const getSingle = (req, res) => {
+const getSingleStudies = (req, res) => {
   if (!ObjectId.isValid(req.params.id)) {
     res.status(400).json('Must use a valid contact id to find a contact.');
   }
@@ -24,7 +24,7 @@ const getSingle = (req, res) => {
   mongodb
     .getDb()
     .db()
-    .collection('Project_3')
+    .collection('Studies')
     .find({ _id: userId })
     .toArray((err, result) => {
       if (err) {
@@ -35,7 +35,7 @@ const getSingle = (req, res) => {
     });
 };
 
-const createContact = async (req, res) => {
+const createStudies = async (req, res) => {
   const contact = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -43,7 +43,7 @@ const createContact = async (req, res) => {
     favoriteColor: req.body.favoriteColor,
     birthday: req.body.birthday
   };
-  const response = await mongodb.getDb().db().collection('Project_3').insertOne(contact);
+  const response = await mongodb.getDb().db().collection('Studies').insertOne(contact);
   if (response.acknowledged) {
     res.status(201).json(response);
   } else {
@@ -51,7 +51,7 @@ const createContact = async (req, res) => {
   }
 };
 
-const updateContact = async (req, res) => {
+const updateStudies = async (req, res) => {
   if (!ObjectId.isValid(req.params.id)) {
     res.status(400).json('Must use a valid contact id to update a contact.');
   }
@@ -67,7 +67,7 @@ const updateContact = async (req, res) => {
   const response = await mongodb
     .getDb()
     .db()
-    .collection('Project_3')
+    .collection('Studies')
     .replaceOne({ _id: userId }, contact);
   console.log(response);
   if (response.modifiedCount > 0) {
@@ -77,12 +77,12 @@ const updateContact = async (req, res) => {
   }
 };
 
-const deleteContact = async (req, res) => {
+const deleteStudies = async (req, res) => {
   if (!ObjectId.isValid(req.params.id)) {
     res.status(400).json('Must use a valid contact id to delete a contact.');
   }
   const userId = new ObjectId(req.params.id);
-  const response = await mongodb.getDb().db().collection('Project_3').remove({ _id: userId }, true);
+  const response = await mongodb.getDb().db().collection('Studies').remove({ _id: userId }, true);
   console.log(response);
   if (response.deletedCount > 0) {
     res.status(204).send();
@@ -92,9 +92,9 @@ const deleteContact = async (req, res) => {
 };
 
 module.exports = {
-  getAll,
-  getSingle,
-  createContact,
-  updateContact,
-  deleteContact
+  getAllStudies,
+  getSingleStudies,
+  createStudies,
+  updateStudies,
+  deleteStudies
 };
